@@ -1,0 +1,27 @@
+name: Build Resume PDF
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - '**/*.tex'
+
+jobs:
+  compile:
+    name: Compile resume pdf
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document(s)
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: "*.tex"
+
+      - name: Commit generated PDF if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Rebuild resume PDF via pdflatex
+          file_pattern: '*.pdf'
